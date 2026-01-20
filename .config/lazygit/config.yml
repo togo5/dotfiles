@@ -3,13 +3,24 @@
 
 gui:
   theme:
+    # GitHub Dark Default
     activeBorderColor:
-      - green
+      - "#58a6ff"
       - bold
     inactiveBorderColor:
-      - white
+      - "#8b949e"
+    optionsTextColor:
+      - "#58a6ff"
     selectedLineBgColor:
-      - reverse
+      - "#30363d"
+    cherryPickedCommitBgColor:
+      - "#3fb950"
+    cherryPickedCommitFgColor:
+      - "#0d1117"
+    unstagedChangesColor:
+      - "#f85149"
+    defaultFgColor:
+      - "#c9d1d9"
   showIcons: true
   nerdFontsVersion: "3"
 

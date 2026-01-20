@@ -1,19 +1,19 @@
 return {
-  -- Black Metalテーマを追加
+  -- GitHub Darkテーマを追加
   {
-    "metalelf0/black-metal-theme-neovim",
+    "projekt0n/github-nvim-theme",
     lazy = false,
     priority = 1000,
     config = function()
-      require("black-metal").setup({})
+      require("github-theme").setup({})
     end,
   },
 
-  -- LazyVimのcolorschemeを設定（バンド名を指定）
+  -- LazyVimのcolorschemeを設定
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "mayhem",
+      colorscheme = "github_dark_default",
     },
   },
 }

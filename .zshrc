@@ -24,4 +24,14 @@ else
 fi
 
 # ========== 共通設定 ==========
+
+# Starship prompt
 eval "$(starship init zsh)"
+
+# エイリアス
+alias lg="lazygit"
+alias vi="nvim"
+alias vim="nvim"
+
+# PATH設定
+export PATH="$HOME/.local/bin:$PATH"

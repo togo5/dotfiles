@@ -27,7 +27,7 @@ install_tools() {
     echo ""
     echo "=== Installing Tools ==="
 
-    brew install neovim lazygit zellij starship claude-code
+    brew install neovim lazygit zellij starship fzf ghq claude-code
 }
 
 # ========== 設定ファイルのリンク ==========

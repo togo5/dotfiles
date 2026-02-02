@@ -18,9 +18,14 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n" | tee >(pbcopy)'    
 else
     # ========== Linux（Docker Container）設定 ==========
-    
+
+    # Linuxbrew
+    if [ -d "/home/linuxbrew/.linuxbrew" ]; then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+    fi
+
     # UUIDv4 自動生成（表示のみ）
-    alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n"'    
+    alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]" | tr -d "\n"'
 fi
 
 # ========== 共通設定 ==========

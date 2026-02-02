@@ -29,4 +29,22 @@ else
 fi
 
 # ========== 共通設定 ==========
+
+# Starship prompt
 eval "$(starship init bash)"
+
+# エイリアス
+alias lg="lazygit"
+alias vi="nvim"
+alias vim="nvim"
+
+# ghq + fzf integration
+function cdp() {
+  local selected_dir=$(ghq list -p | fzf --reverse)
+  if [[ -n "$selected_dir" ]]; then
+    cd "$selected_dir"
+  fi
+}
+
+# PATH設定
+export PATH="$HOME/.local/bin:$PATH"

@@ -79,6 +79,15 @@ link_configs() {
     ln -sf "$DOTFILES_DIR/.zshrc" ~/.zshrc
     echo "Linked: zshrc"
 
+    # Bash (for Linux/devcontainer)
+    if [[ "$OSTYPE" != "darwin"* ]]; then
+        if [ -f ~/.bashrc ] && [ ! -L ~/.bashrc ]; then
+            mv ~/.bashrc ~/.bashrc.backup.$(date +%Y%m%d%H%M%S)
+        fi
+        ln -sf "$DOTFILES_DIR/.bashrc" ~/.bashrc
+        echo "Linked: bashrc"
+    fi
+
     # Claude Code
     mkdir -p ~/.claude
     ln -sf "$DOTFILES_DIR/.claude/statusline-command.sh" ~/.claude/statusline-command.sh

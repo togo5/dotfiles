@@ -27,7 +27,12 @@ install_tools() {
     echo ""
     echo "=== Installing Tools ==="
 
-    brew install neovim lazygit zellij starship fzf ghq claude-code
+    brew install neovim lazygit zellij starship fzf ghq
+
+    # Claude Code (ネイティブインストール)
+    if ! command -v claude &> /dev/null; then
+        curl -fsSL https://claude.ai/install.sh | bash
+    fi
 }
 
 # ========== 設定ファイルのリンク ==========
@@ -71,6 +76,10 @@ link_configs() {
         ln -sf "$DOTFILES_DIR/.config/ghostty/config" "$GHOSTTY_DIR/config"
         echo "Linked: ghostty"
     fi
+
+    # tmux
+    ln -sfn "$DOTFILES_DIR/.config/tmux" ~/.config/tmux
+    echo "Linked: tmux"
 
     # Zsh
     if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ]; then

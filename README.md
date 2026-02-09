@@ -6,6 +6,7 @@
 |--------|------|
 | [Neovim](https://neovim.io/) | テキストエディタ (LazyVim) |
 | [Lazygit](https://github.com/jesseduffield/lazygit) | Git TUI |
+| [tmux](https://github.com/tmux/tmux) | ターミナルマルチプレクサ |
 | [Zellij](https://zellij.dev/) | ターミナルマルチプレクサ |
 | [Starship](https://starship.rs/) | シェルプロンプト |
 | [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | AI コーディングアシスタント |
@@ -17,6 +18,7 @@
 .config/
 ├── nvim/           # Neovim (LazyVim)
 ├── lazygit/        # Lazygit
+├── tmux/           # tmux
 ├── zellij/         # Zellij
 ├── ghostty/        # Ghostty (macOS)
 └── starship.toml   # Starship

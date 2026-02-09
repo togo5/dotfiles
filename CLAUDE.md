@@ -1,0 +1,15 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## リポジトリ概要
+
+macOS / Linux (devcontainer) 両対応の個人dotfilesリポジトリ。`install.sh` でツールのインストールとシンボリックリンクの作成を一括で行う。
+
+## ルール
+
+- ツール追加時は基本的に `brew install` を優先する。brewで提供されていない場合のみ別のインストール方法を使う
+- `.zshrc` と `.bashrc` は構造が同一。変更時は両方を同期すること
+- ホームディレクトリ直下のdotfile (`.zshrc`, `.bashrc`) → repoルートに配置
+- XDG準拠の設定 (nvim, zellij, tmux等) → `.config/` 以下に配置
+- OS分岐は `$OSTYPE` で判定する

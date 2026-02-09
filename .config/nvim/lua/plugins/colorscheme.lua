@@ -1,5 +1,5 @@
 return {
-  -- GitHub Darkテーマを追加
+  -- GitHub Darkテーマ
   {
     "projekt0n/github-nvim-theme",
     lazy = false,
@@ -8,34 +8,23 @@ return {
       require("github-theme").setup({
         groups = {
           github_dark_default = {
-            -- Neo-tree directory colors (light grayish white with slight purple tint)
-            NeoTreeDirectoryIcon = { fg = "#e2e4e8" },
-            NeoTreeDirectoryName = { fg = "#e2e4e8" },
-            NeoTreeRootName = { fg = "#e2e4e8", style = "bold" },
-            NeoTreeExpander = { fg = "#484f58" },
-            NeoTreeIndentMarker = { fg = "#30363d" },
-            -- Neo-tree git status colors
-            NeoTreeGitAdded = { fg = "#3fb950" },
-            NeoTreeGitModified = { fg = "#d29922" },
-            NeoTreeGitDeleted = { fg = "#f85149" },
-            NeoTreeGitRenamed = { fg = "#3fb950" },
-            NeoTreeGitUntracked = { fg = "#3fb950" },
-            NeoTreeGitIgnored = { fg = "#484f58" },
-            NeoTreeGitConflict = { fg = "#f85149", style = "bold" },
-            NeoTreeGitUnstaged = { fg = "#d29922" },
-            NeoTreeGitStaged = { fg = "#3fb950" },
-            NeoTreeDimText = { fg = "#484f58" },
+            -- 変更のないファイル/ディレクトリは白
+            Directory = { fg = "#e6edf3" },
+
+            -- Snacks Explorer/Picker Git status colors
+            SnacksPickerGitStatusAdded = { fg = "#3fb950" },
+            SnacksPickerGitStatusModified = { fg = "#d29922" },
+            SnacksPickerGitStatusDeleted = { fg = "#f85149" },
+            SnacksPickerGitStatusRenamed = { fg = "#3fb950" },
+            SnacksPickerGitStatusCopied = { fg = "#3fb950" },
+            SnacksPickerGitStatusUntracked = { fg = "#8b949e" },
+            SnacksPickerGitStatusIgnored = { fg = "#484f58" },
+            SnacksPickerGitStatusUnmerged = { fg = "#f85149" },
+            SnacksPickerGitStatusStaged = { fg = "#3fb950" },
           },
         },
       })
+      vim.cmd.colorscheme("github_dark_default")
     end,
-  },
-
-  -- LazyVimのcolorschemeを設定
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "github_dark_default",
-    },
   },
 }

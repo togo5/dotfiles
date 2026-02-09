@@ -46,5 +46,8 @@ function cdp() {
   fi
 }
 
-# PATH設定
+# asdf
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
+# Claude Code
 export PATH="$HOME/.local/bin:$PATH"

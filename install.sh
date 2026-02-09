@@ -27,7 +27,7 @@ install_tools() {
     echo ""
     echo "=== Installing Tools ==="
 
-    brew install neovim lazygit zellij starship fzf ghq
+    brew install asdf neovim lazygit zellij tmux starship fzf ghq delta ripgrep fd
 
     # Claude Code (ネイティブインストール)
     if ! command -v claude &> /dev/null; then
@@ -44,10 +44,6 @@ link_configs() {
     mkdir -p ~/.config
 
     # Neovim (LazyVim)
-    if [ -d ~/.config/nvim ] && [ ! -L ~/.config/nvim ]; then
-        echo "Backing up existing nvim config..."
-        mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d%H%M%S)
-    fi
     ln -sfn "$DOTFILES_DIR/.config/nvim" ~/.config/nvim
     echo "Linked: nvim"
 
@@ -82,17 +78,11 @@ link_configs() {
     echo "Linked: tmux"
 
     # Zsh
-    if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ]; then
-        mv ~/.zshrc ~/.zshrc.backup.$(date +%Y%m%d%H%M%S)
-    fi
     ln -sf "$DOTFILES_DIR/.zshrc" ~/.zshrc
     echo "Linked: zshrc"
 
     # Bash (for Linux/devcontainer)
     if [[ "$OSTYPE" != "darwin"* ]]; then
-        if [ -f ~/.bashrc ] && [ ! -L ~/.bashrc ]; then
-            mv ~/.bashrc ~/.bashrc.backup.$(date +%Y%m%d%H%M%S)
-        fi
         ln -sf "$DOTFILES_DIR/.bashrc" ~/.bashrc
         echo "Linked: bashrc"
     fi

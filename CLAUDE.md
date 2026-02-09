@@ -17,3 +17,27 @@ macOS / Linux (devcontainer) 両対応の個人dotfilesリポジトリ。`instal
 - 自動生成ファイルやロックファイルはdotfilesの管理対象外とする
   - 例: `lazy-lock.json`, `lazyvim.json`, `.neoconf.json`, `stylua.toml`, `LICENSE`, `README.md`（nvim starter由来）
   - 環境差分レポートでこれらが検出されても同期不要
+
+## devcontainer CLIでdotfilesを使う
+
+`devcontainer.json`の`dotfilesRepository`設定は**VS Code専用**であり、devcontainer CLIでは無視される。
+コマンドラインオプションで明示的に指定する必要がある：
+
+```bash
+devcontainer up --workspace-folder . \
+  --dotfiles-repository https://github.com/togo5/dotfiles.git \
+  --dotfiles-install-command install.sh
+```
+
+### 利用可能なオプション
+
+| オプション | 説明 | デフォルト |
+|-----------|------|-----------|
+| `--dotfiles-repository` | dotfilesリポジトリのURL | - |
+| `--dotfiles-install-command` | クローン後に実行するコマンド | `install.sh`, `install`, `bootstrap.sh`等を自動検出 |
+| `--dotfiles-target-path` | クローン先パス | `~/dotfiles` |
+
+### 参考
+
+- dotfilesの`install.sh`がHomebrewを使う場合、Linux環境でもLinuxbrewとして動作する
+- インストール後、PATHを通すには `eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"` が必要

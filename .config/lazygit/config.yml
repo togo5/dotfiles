@@ -23,12 +23,10 @@ gui:
       - "#c9d1d9"
   showIcons: true
   nerdFontsVersion: "3"
-
 git:
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never
-
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never
 keybinding:
   universal:
     quit: q

@@ -7,39 +7,49 @@ input=$(cat)
 model_name=$(echo "$input" | jq -r '.model.display_name')
 used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 remaining_percentage=$(echo "$input" | jq -r '.context_window.remaining_percentage // empty')
+cwd=$(echo "$input" | jq -r '.workspace.current_dir')
 
-# 使用率に応じて色を決定する関数
+# git branchを取得（gitリポジトリの場合のみ、ロックをスキップ）
+git_branch=""
+if [ -n "$cwd" ] && [ -d "$cwd/.git" ] || git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
+    git_branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null)
+fi
+
+# 使用率に応じて色を決定
 get_color() {
     local percentage=$1
-
-    # 割合が空の場合は白を返す
     if [ -z "$percentage" ]; then
         echo "\033[37m"
         return
     fi
-
-    # 浮動小数点の比較のために bc を使用
     if (( $(echo "$percentage <= 20" | bc -l) )); then
         echo "\033[38;5;28m"      # 深緑
     elif (( $(echo "$percentage <= 40" | bc -l) )); then
-        echo "\033[38;5;106m"      # 黄緑
+        echo "\033[38;5;106m"     # 黄緑
     elif (( $(echo "$percentage <= 60" | bc -l) )); then
-        echo "\033[38;5;220m"      # 黄色
+        echo "\033[38;5;220m"     # 黄色
     elif (( $(echo "$percentage <= 80" | bc -l) )); then
-        echo "\033[38;5;208m" # オレンジ
+        echo "\033[38;5;208m"     # オレンジ
     else
-        echo "\033[38;5;196m"      # 赤
+        echo "\033[38;5;196m"     # 赤
     fi
 }
 
-# カラー設定
 color=$(get_color "$used_percentage")
 reset="\033[0m"
 
-# 出力処理
+# 出力を構築（モデル名 | ブランチ名 | 使用率 の順）
+output="$model_name"
+
+# ブランチ名を追加
+if [ -n "$git_branch" ]; then
+    output="$output | $git_branch"
+fi
+
+# 使用率を追加
 if [ -n "$used_percentage" ] && [ -n "$remaining_percentage" ]; then
-    printf "%s | ${color}使用率: %.1f%%${reset} | ${color}残り: %.1f%%${reset}\n" \
-        "$model_name" "$used_percentage" "$remaining_percentage"
+    output="$output | ${color}%.1f%% / %.1f%%${reset}"
+    printf "$output\n" "$used_percentage" "$remaining_percentage"
 else
-    printf "%s | コンテキスト: データなし\n" "$model_name"
+    printf "$output\n"
 fi

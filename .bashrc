@@ -48,3 +48,21 @@ function cdp() {
 
 # PATH設定
 export PATH="$HOME/.local/bin:$PATH"
+
+# メモ関数
+m(){
+  local ts
+  ts="$(date '+%F %H:%M')"
+  __MEMO_MD+="## ${ts}"$'\n'
+  __MEMO_MD+="$(cat)"$'\n\n'
+}
+m1(){
+  local ts
+  ts="$(date '+%F %H:%M')"
+  __MEMO_MD+="## ${ts}"$'\n'
+  __MEMO_MD+="$*"$'\n\n'
+}
+ml(){ printf "%s" "$__MEMO_MD"; }
+mc(){ __MEMO_MD=""; }
+ms(){ printf "%s" "$__MEMO_MD" >> "${1:-$HOME/memo.md}"; }
+msc(){ ms "$1"; mc; }

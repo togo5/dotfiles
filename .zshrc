@@ -46,6 +46,19 @@ function cdp() {
   fi
 }
 
+# worktree + fzf integration
+function cdw() {
+  local wt_root="${WT_ROOT:-$HOME/git/wt}"
+  if [[ ! -d "$wt_root" ]]; then
+    echo "WT_ROOT not found: $wt_root" >&2
+    return 1
+  fi
+  local selected_dir=$(find "$wt_root" -name ".git" -type f -exec dirname {} \; 2>/dev/null | sed "s|^${wt_root}/||" | fzf --reverse)
+  if [[ -n "$selected_dir" ]]; then
+    cd "$wt_root/$selected_dir"
+  fi
+}
+
 # asdf
 export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 

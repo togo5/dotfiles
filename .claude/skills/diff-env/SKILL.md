@@ -21,7 +21,7 @@ allowed-tools: Bash, Read, Glob, Grep
    - `~/Library/Application Support/lazygit/config.yml` vs `.config/lazygit/config.yml`（macOS）
    - `~/Library/Application Support/com.mitchellh.ghostty/config` vs `.config/ghostty/config`（macOS）
    - `~/.claude/statusline-command.sh` vs `.claude/statusline-command.sh`
-3. **brewパッケージの差分**: `brew list --formula` の結果と `install.sh` の `brew install` 行を比較し、dotfilesで管理されていないツールを列挙する
+3. **brewパッケージの差分**: `brew list --formula` の結果と `install.sh` の `install_core` / `install_extras` 両関数内の `brew install` 行を比較し、dotfilesで管理されていないツールを列挙する
 4. **レポート出力**: 以下の形式でまとめる
    - シンボリックリンクが未適用のファイル一覧
    - 内容に差分があるファイルと具体的な違い

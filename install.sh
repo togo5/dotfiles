@@ -3,8 +3,23 @@ set -e
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-echo "=== Dotfiles Installation ==="
-echo "Dotfiles directory: $DOTFILES_DIR"
+# ========== Usage ==========
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [OPTIONS]
+
+Options:
+  --all       Homebrew + core + extras + link（全部入り）
+  --core      Homebrew + core ツールのインストール
+  --extras    Homebrew + extras ツールのインストール
+  --link      設定ファイルのシンボリックリンク作成のみ
+  --help      この使い方を表示
+
+フラグなし: Homebrew + core + link（デフォルト）
+フラグは組み合わせ可能: $(basename "$0") --core --link
+EOF
+}
 
 # ========== Homebrewのインストール ==========
 
@@ -21,11 +36,11 @@ install_homebrew() {
     echo "Homebrew: OK"
 }
 
-# ========== ツールのインストール ==========
+# ========== Core ツールのインストール ==========
 
-install_tools() {
+install_core() {
     echo ""
-    echo "=== Installing Tools ==="
+    echo "=== Installing Core Tools ==="
 
     brew install asdf neovim lazygit zellij tmux starship fzf ghq delta ripgrep fd
 
@@ -33,6 +48,15 @@ install_tools() {
     if ! command -v claude &> /dev/null; then
         curl -fsSL https://claude.ai/install.sh | bash
     fi
+}
+
+# ========== Extras ツールのインストール ==========
+
+install_extras() {
+    echo ""
+    echo "=== Installing Extra Tools ==="
+
+    brew install gh ollama skaffold hashicorp/tap/terraform tree yq glab dive dotenvx/brew/dotenvx
 }
 
 # ========== 設定ファイルのリンク ==========
@@ -101,10 +125,65 @@ link_configs() {
 
 # ========== メイン ==========
 
-install_homebrew
-install_tools
-link_configs
+echo "=== Dotfiles Installation ==="
+echo "Dotfiles directory: $DOTFILES_DIR"
+
+# フラグパース
+FLAG_CORE=false
+FLAG_EXTRAS=false
+FLAG_LINK=false
+
+if [ $# -eq 0 ]; then
+    # デフォルト: core + link
+    FLAG_CORE=true
+    FLAG_LINK=true
+fi
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --all)
+            FLAG_CORE=true
+            FLAG_EXTRAS=true
+            FLAG_LINK=true
+            ;;
+        --core)
+            FLAG_CORE=true
+            ;;
+        --extras)
+            FLAG_EXTRAS=true
+            ;;
+        --link)
+            FLAG_LINK=true
+            ;;
+        --help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+# Homebrew はツールインストール時に必要
+if [ "$FLAG_CORE" = true ] || [ "$FLAG_EXTRAS" = true ]; then
+    install_homebrew
+fi
+
+if [ "$FLAG_CORE" = true ]; then
+    install_core
+fi
+
+if [ "$FLAG_EXTRAS" = true ]; then
+    install_extras
+fi
+
+if [ "$FLAG_LINK" = true ]; then
+    link_configs
+fi
 
 echo ""
 echo "=== Done ==="
-echo "Run: source ~/.zshrc"

@@ -18,7 +18,7 @@
 | [Claude Code](https://docs.anthropic.com/en/docs/claude-code) | AI コーディングアシスタント |
 | [Ghostty](https://ghostty.org/) | ターミナルエミュレータ (macOS) |
 
-## ツール（拡張: `install-extras.sh`）
+## ツール（拡張: `install.sh --extras`）
 
 | ツール | 説明 |
 |--------|------|
@@ -60,10 +60,11 @@
 ```bash
 git clone https://github.com/togo5/dotfiles.git
 cd dotfiles
-./install.sh
-
-# オプション: 追加ツール (gh, ollama, terraform等)
-./install-extras.sh
+./install.sh            # Homebrew + core + link（デフォルト）
+./install.sh --all      # 全部入り（core + extras + link）
+./install.sh --extras   # 追加ツールのみ (gh, ollama, terraform等)
+./install.sh --link     # 設定ファイルのリンクのみ
+./install.sh --help     # 使い方表示
 ```
 
 ## devcontainer CLI

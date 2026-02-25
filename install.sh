@@ -77,6 +77,10 @@ link_configs() {
     ln -sfn "$DOTFILES_DIR/.config/tmux" ~/.config/tmux
     echo "Linked: tmux"
 
+    # markdownlint
+    ln -sfn "$DOTFILES_DIR/.config/markdownlint" ~/.config/markdownlint
+    echo "Linked: markdownlint"
+
     # Zsh
     ln -sf "$DOTFILES_DIR/.zshrc" ~/.zshrc
     echo "Linked: zshrc"

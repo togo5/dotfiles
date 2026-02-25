@@ -14,6 +14,7 @@ macOS / Linux (devcontainer) 両対応の個人dotfilesリポジトリ。`instal
 - XDG準拠の設定 (nvim, zellij, tmux等) → `.config/` 以下に配置
 - OS分岐は `$OSTYPE` で判定する
 - `install.sh` のシンボリックリンクはバックアップなしで上書きする（gitで復元可能なため）
+- 設定ファイルや `install.sh` に変更を加えた場合、`README.md` への反映が必要か確認すること
 - 自動生成ファイルやロックファイルはdotfilesの管理対象外とする
   - 例: `lazy-lock.json`, `lazyvim.json`, `.neoconf.json`, `stylua.toml`, `LICENSE`, `README.md`（nvim starter由来）
   - 環境差分レポートでこれらが検出されても同期不要

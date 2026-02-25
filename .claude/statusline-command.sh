@@ -9,10 +9,24 @@ used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // empt
 remaining_percentage=$(echo "$input" | jq -r '.context_window.remaining_percentage // empty')
 cwd=$(echo "$input" | jq -r '.workspace.current_dir')
 
-# git branchを取得（gitリポジトリの場合のみ、ロックをスキップ）
+# git情報を取得（gitリポジトリの場合のみ、ロックをスキップ）
 git_branch=""
-if [ -n "$cwd" ] && [ -d "$cwd/.git" ] || git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
+git_repo=""
+git_worktree=""
+if [ -n "$cwd" ] && git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
     git_branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null)
+
+    # リモートURLからrepo名を取得
+    remote_url=$(git -C "$cwd" remote get-url origin 2>/dev/null)
+    if [ -n "$remote_url" ]; then
+        git_repo=$(basename "$remote_url" .git)
+    fi
+
+    # worktreeかどうかを判定（.git がファイル＝worktree、ディレクトリ＝本体）
+    git_dir=$(git -C "$cwd" rev-parse --git-dir 2>/dev/null)
+    if [ -n "$git_dir" ] && [ -f "$cwd/.git" ]; then
+        git_worktree="(wt)"
+    fi
 fi
 
 # 使用率に応じて色を決定
@@ -38,12 +52,26 @@ get_color() {
 color=$(get_color "$used_percentage")
 reset="\033[0m"
 
-# 出力を構築（モデル名 | ブランチ名 | 使用率 の順）
+# 出力を構築（モデル名 | repo名[(wt)] branch名 | 使用率 の順）
 output="$model_name"
 
-# ブランチ名を追加
-if [ -n "$git_branch" ]; then
-    output="$output | $git_branch"
+# repo名 + worktree + ブランチ名を追加
+if [ -n "$git_repo" ] || [ -n "$git_branch" ]; then
+    git_info=""
+    if [ -n "$git_repo" ]; then
+        git_info="$git_repo"
+        if [ -n "$git_worktree" ]; then
+            git_info="$git_info$git_worktree"
+        fi
+    fi
+    if [ -n "$git_branch" ]; then
+        if [ -n "$git_info" ]; then
+            git_info="$git_info | $git_branch"
+        else
+            git_info="$git_branch"
+        fi
+    fi
+    output="$output | $git_info"
 fi
 
 # 使用率を追加

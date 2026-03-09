@@ -48,6 +48,7 @@ len=${#colors[@]}
 
 while true; do
     tmux set -g pane-active-border-style "fg=#${colors[$i]}" 2>/dev/null || exit 0
+    tmux set -g status-style "bg=#${colors[$i]},fg=#000000" 2>/dev/null
     i=$(( (i + STEP) % len ))
     sleep "$INTERVAL"
 done

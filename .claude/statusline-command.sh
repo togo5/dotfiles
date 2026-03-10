@@ -97,8 +97,7 @@ BAR_WIDTH=10
 make_link() {
     local url=$1
     local text=$2
-    # OSC 8 ;;URL ST text OSC 8 ;; ST
-    printf "\033]8;;%s\033\\%s\033]8;;\033\\" "$url" "$text"
+    printf '\e]8;;%s\a%s\e]8;;\a' "$url" "$text"
 }
 
 # ---- 1行目: [model] 📁 {project} | 🌿 {branch}{git-status} ----

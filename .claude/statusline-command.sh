@@ -64,30 +64,31 @@ if [ -n "$cwd" ] && git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
     fi
 fi
 
-# プログレスバーを構築（printf+tr方式、10文字、▓=使用済み、░=残り）
+# プログレスバーを構築（10文字、▓=使用済み、░=残り）
 build_progress_bar() {
     local pct=${1:-0}
     local filled=$(( pct * BAR_WIDTH / 100 ))
     [ "$filled" -gt "$BAR_WIDTH" ] && filled=$BAR_WIDTH
     local empty=$(( BAR_WIDTH - filled ))
 
-    # 使用率に応じてバーの色を決定
+    # 使用率に応じてバー全体の色を決定
     local bar_color
-    if [ "$filled" -le 2 ]; then
-        bar_color="\033[38;5;28m"      # 深緑
-    elif [ "$filled" -le 4 ]; then
-        bar_color="\033[38;5;106m"     # 黄緑
-    elif [ "$filled" -le 6 ]; then
-        bar_color="\033[38;5;220m"     # 黄色
-    elif [ "$filled" -le 8 ]; then
-        bar_color="\033[38;5;208m"     # オレンジ
+    if [ "$pct" -le 40 ]; then
+        bar_color="38;5;28"        # 深緑
+    elif [ "$pct" -le 50 ]; then
+        bar_color="38;5;46"        # 緑（文字側がレインボー）
+    elif [ "$pct" -le 60 ]; then
+        bar_color="38;5;220"       # 黄色
+    elif [ "$pct" -le 70 ]; then
+        bar_color="38;5;208"       # オレンジ
     else
-        bar_color="\033[38;5;196m"     # 赤
+        bar_color="38;5;196"       # 赤
     fi
 
-    local bar="${bar_color}"
+    local bar="\033[${bar_color}m"
     [ "$filled" -gt 0 ] && bar="${bar}$(printf "%${filled}s" | tr ' ' '▓')"
-    [ "$empty" -gt 0 ] && bar="${bar}$(printf "%${empty}s" | tr ' ' '░')"
+
+    [ "$empty" -gt 0 ] && bar="${bar}${reset}$(printf "%${empty}s" | tr ' ' '░')"
     bar="${bar}${reset}"
     printf "%b" "$bar"
 }
@@ -136,7 +137,13 @@ line1="${line1}${lines_display}"
 pct=$(echo "$used_percentage" | cut -d. -f1)
 if [ -n "$pct" ] && [ "$pct" -ge 0 ] 2>/dev/null; then
     bar=$(build_progress_bar "$pct")
-    line2="Context: ${bar} ${pct}%"
+    if [ "$pct" -gt 40 ] && [ "$pct" -le 50 ]; then
+        # Context の各文字をレインボーに (C=赤)
+        ctx="\033[38;5;196mC\033[38;5;208mo\033[38;5;220mn\033[38;5;46mt\033[38;5;33me\033[38;5;129mx\033[38;5;201mt\033[0m"
+        line2="${ctx}: ${bar} ${pct}%"
+    else
+        line2="Context: ${bar} ${pct}%"
+    fi
 else
     line2="Context: --"
 fi
